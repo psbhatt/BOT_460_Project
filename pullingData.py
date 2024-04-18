@@ -5,7 +5,7 @@ from nba_api.live.nba.endpoints import scoreboard
 from nba_api.stats.endpoints import LeagueGameLog, CumeStatsTeam, CumeStatsTeamGames
 from nba_api.stats.static import teams, players
 import stats
-
+import re
 
 def expanding_mean(group):
     return group.expanding().mean()
@@ -42,6 +42,7 @@ def main():
     games['OREB_PCT_OPP'] = stats.oreb_pct_OPP(games)
     games['DREB_PCT_OPP'] = stats.dreb_pct_OPP(games)
     games['FT_PER_FGA_OPP'] = stats.ft_per_fga_OPP(games)
+    games['HOME'] = games['MATCHUP'].apply(lambda x: 0 if re.search(r'@', str(x)) else 1)
 
 
     # for every team, want their stats from every game played up unto that point
