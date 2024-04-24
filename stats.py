@@ -1,45 +1,45 @@
 #
 #
-# def fg_pct(data, group=''):
-#     return data[group + 'FGM'] / data[group + 'FGA']
+# def fg_pct(graphs, group=''):
+#     return graphs[group + 'FGM'] / graphs[group + 'FGA']
 #
 #
-# def fg2a(data, group=''):
-#     return data[group + 'FGA'] - data[group + 'FG3A']
+# def fg2a(graphs, group=''):
+#     return graphs[group + 'FGA'] - graphs[group + 'FG3A']
 #
 #
-# def fg2m(data, group=''):
-#     return data[group + 'FGM'] - data[group + 'FG3M']
+# def fg2m(graphs, group=''):
+#     return graphs[group + 'FGM'] - graphs[group + 'FG3M']
 #
 #
-# def fg2_pct(data, group=''):
-#     return fg2m(data, group) / fg2a(data, group)
+# def fg2_pct(graphs, group=''):
+#     return fg2m(graphs, group) / fg2a(graphs, group)
 #
 #
-# def fg3_pct(data, group=''):
-#     return data[group + 'FG3M'] / data[group + 'FG3A']
+# def fg3_pct(graphs, group=''):
+#     return graphs[group + 'FG3M'] / graphs[group + 'FG3A']
 #
 #
-# def fg3a_rate(data, group=''):
-#     return data[group + 'FG3A'] / data[group + 'FGA']
+# def fg3a_rate(graphs, group=''):
+#     return graphs[group + 'FG3A'] / graphs[group + 'FGA']
 #
 #
-# def ft_pct(data, group=''):
-#     return data[group + 'FTM'] / data[group + 'FTA']
+# def ft_pct(graphs, group=''):
+#     return graphs[group + 'FTM'] / graphs[group + 'FTA']
 #
 #
-# def ft_rate(data, group=''):
-#     return data[group + 'FTA'] / data[group + 'FGA']
+# def ft_rate(graphs, group=''):
+#     return graphs[group + 'FTA'] / graphs[group + 'FGA']
 #
 #
-# def ts_pct(data, group=''):
-#     return data[group + 'PTS'] / (
-#         2 * (data[group + 'FGA'] + 0.44 * data[group + 'FTA'])
+# def ts_pct(graphs, group=''):
+#     return graphs[group + 'PTS'] / (
+#         2 * (graphs[group + 'FGA'] + 0.44 * graphs[group + 'FTA'])
 #     )
 #
 #
-# def ast_pct(data):
-#     return data.AST / data.FGM
+# def ast_pct(graphs):
+#     return graphs.AST / graphs.FGM
 
 def eff_fg_pct(data, group=''):
     return (data[group + 'FGM'] + 0.5 * data[group + 'FG3M']) / data[group + 'FGA']
@@ -163,9 +163,9 @@ def possessions_OPP(data):
            ) / 2
 
 
-# def reb_pct(data):
-#     return data.REB / (data.REB + data.REB_OPP)
+# def reb_pct(graphs):
+#     return graphs.REB / (graphs.REB + graphs.REB_OPP)
 #
 #
-# def stl_pct(data):
-#     return data.STL / possessions(data)
+# def stl_pct(graphs):
+#     return graphs.STL / possessions(graphs)

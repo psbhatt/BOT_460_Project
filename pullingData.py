@@ -66,9 +66,10 @@ def addingSeasons():
     pd.set_option('display.max_columns', None)
     pd.set_option('display.max_rows', None)
 
-    curr_szn = LeagueGameLog(season=2023, season_type_all_star='Regular Season').get_data_frames()[0]
-    last_szn = LeagueGameLog(season=2022, season_type_all_star='Regular Season').get_data_frames()[0]
-    games = pd.concat([last_szn, curr_szn], ignore_index=True, axis=0)
+    szns = [LeagueGameLog(season=i, season_type_all_star='Regular Season').get_data_frames()[0] for i in range(2019, 2024)]
+    # curr_szn = LeagueGameLog(season=2023, season_type_all_star='Regular Season').get_data_frames()[0]
+    # last_szn = LeagueGameLog(season=2022, season_type_all_star='Regular Season').get_data_frames()[0]
+    games = pd.concat(szns, ignore_index=True, axis=0)
     games = games.merge(games, how='inner', on='GAME_ID', suffixes=[None, '_OPP'])
     games = games[games["TEAM_ID"] != games["TEAM_ID_OPP"]].reset_index()
     games.drop(columns=['SEASON_ID', 'VIDEO_AVAILABLE', 'SEASON_ID_OPP', 'VIDEO_AVAILABLE_OPP'], inplace=True)
@@ -111,7 +112,7 @@ def addingSeasons():
               games.columns.tolist()]
     print(grouped.loc[0])
 
-    grouped.to_csv("22_23.csv")
+    grouped.to_csv("19_23.csv")
 
 
 if __name__ == '__main__':
