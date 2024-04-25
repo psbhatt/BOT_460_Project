@@ -11,9 +11,13 @@ import pandas as pd
 from sklearn.model_selection import train_test_split
 import sys
 
-data = pd.read_csv("Dataset1.csv", converters={'WL': lambda x: int(x == 'W')})
-numeric = data[data.columns.difference(['WL'])].select_dtypes(include='number')
-norm_data=(numeric-numeric.mean())/numeric.std()
+data = pd.read_csv("19_23_updated.csv", converters={'WL': lambda x: int(x == 'W'), 'GAME_ID': lambda x: str(x)[2:]})
+data['GAME_ID'] = data['GAME_ID'].astype(int)
+numeric = data[data.columns.difference(['WL', 'GAME_ID'])].select_dtypes(include='number')
+norm_data = (numeric - numeric.mean()) / numeric.std()
+#data = pd.read_csv("Dataset1.csv", converters={'WL': lambda x: int(x == 'W')})
+#numeric = data[data.columns.difference(['WL'])].select_dtypes(include='number')
+#norm_data=(numeric-numeric.mean())/numeric.std()
 
 
 
@@ -23,16 +27,22 @@ pd.set_option('display.max_columns', None)
 print("norm data shape ", norm_data.shape)
 # print(" norm data first element ", norm_data.loc[0])
 
+ids = data['GAME_ID']
 target = data['WL']
 #unnamed is the actual index of the dataset. dont know what 'index' is
 # WL was already dropped at this point
-columns_to_drop = ['GAME_ID', 'MIN', 'MIN_OPP','index', 'TEAM_ID', 'TEAM_ID_OPP']
+columns_to_drop = ['MIN', 'MIN_OPP','index', 'TEAM_ID', 'TEAM_ID_OPP']
 features = norm_data.drop(columns=columns_to_drop)
 # features = norm_data[norm_data.columns.difference(['WL'])]
 print("features shape ", features.shape)
 
 print(" features first elemn ", features.loc[0])
-features_train, features_test, target_train, target_test = train_test_split(features, target, test_size=0.3, random_state=0)
+#features_train, features_test, target_train, target_test = train_test_split(features, target, test_size=0.3, random_state=0)
+features_train = features[ids < 22300061]
+features_test = features[ids >= 22300061]
+target_train = target[ids < 22300061]
+target_test = target[ids >= 22300061]
+print(features_train.shape)
 
 class PrintFinalAccuracy(tf.keras.callbacks.Callback):
     def on_epoch_end(self, epoch, logs=None):
