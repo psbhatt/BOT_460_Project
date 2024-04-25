@@ -26,13 +26,21 @@ print("norm data shape ", norm_data.shape)
 target = data['WL']
 #unnamed is the actual index of the dataset. dont know what 'index' is
 # WL was already dropped at this point
-columns_to_drop = ['GAME_ID', 'MIN', 'MIN_OPP','index']
+columns_to_drop = ['GAME_ID', 'MIN', 'MIN_OPP','index', 'TEAM_ID', 'TEAM_ID_OPP']
 features = norm_data.drop(columns=columns_to_drop)
 # features = norm_data[norm_data.columns.difference(['WL'])]
 print("features shape ", features.shape)
 
 print(" features first elemn ", features.loc[0])
 features_train, features_test, target_train, target_test = train_test_split(features, target, test_size=0.3, random_state=0)
+
+class PrintFinalAccuracy(tf.keras.callbacks.Callback):
+    def on_epoch_end(self, epoch, logs=None):
+        if epoch == (epochs - 1):
+            print(f"Final Training Accuracy: {logs['accuracy']:.4f}")
+            print(f"Final Validation Accuracy: {logs['val_accuracy']:.4f}")
+
+print_final_accuracy_callback = PrintFinalAccuracy()
 
 # chosen arbitrarily
 initializer = tf.keras.initializers.GlorotUniform
@@ -46,8 +54,11 @@ def create_model(initializer, regularizer):
                               kernel_initializer=initializer, kernel_regularizer=regularizer),
         # You may add a dropout to this layer by adding a dropout layer as below
         # tf.keras.layers.Dropout(.2, input_shape=(2,)),
+        tf.keras.layers.Dropout(.3), # dropout layer with rate of .3
         tf.keras.layers.Dense(64, activation=tf.nn.relu, kernel_initializer=initializer),
+        tf.keras.layers.Dropout(.3),
         tf.keras.layers.Dense(32, activation=tf.nn.relu, kernel_initializer=initializer),
+          tf.keras.layers.Dropout(.3),
         tf.keras.layers.Dense(1, activation='sigmoid', kernel_initializer=initializer)
         # This output is z without softmax. It's called logits.
         # you could also use an output layer with softmax activation as in below
@@ -58,7 +69,7 @@ def create_model(initializer, regularizer):
 
 # model = create_model(initializer, regularizer)
 batch_size = 64 # what should this be changed to
-epochs = 40
+epochs = 120
 learning_rates = [0.25, 0.1, 0.01]
 optimizers = []
 for lr in learning_rates:
@@ -80,7 +91,8 @@ for i, opt in enumerate(optimizers):
   optimizer_type = opt.get_config()['name']
   learning_rate = opt.get_config()['learning_rate']
 #   history=model.fit(features, target, batch_size=batch_size, epochs=epochs)
-  history=model.fit(features_train, target_train, batch_size=batch_size, epochs=epochs, validation_data=(features_test, target_test))
+  #history=model.fit(features_train, target_train, batch_size=batch_size, epochs=epochs, validation_data=(features_test, target_test))
+  history=model.fit(features_train, target_train, batch_size=batch_size, epochs=epochs, validation_data=(features_test, target_test), verbose=0,callbacks=[print_final_accuracy_callback])
   plt.plot(history.history['accuracy'])
   plt.plot(history.history['val_accuracy'])
   plt.title('model accuracy')
