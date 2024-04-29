@@ -38,10 +38,10 @@ print("features shape ", features.shape)
 
 print(" features first elemn ", features.loc[0])
 #features_train, features_test, target_train, target_test = train_test_split(features, target, test_size=0.3, random_state=0)
-features_train = features[ids < 22300061]
-features_test = features[ids >= 22300061]
-target_train = target[ids < 22300061]
-target_test = target[ids >= 22300061]
+features_train = features[ids < 22300000]
+features_test = features[ids >= 22300000]
+target_train = target[ids < 22300000]
+target_test = target[ids >= 22300000]
 print(features_train.shape)
 
 class PrintFinalAccuracy(tf.keras.callbacks.Callback):
@@ -80,34 +80,52 @@ def create_model(initializer, regularizer):
 # model = create_model(initializer, regularizer)
 batch_size = 64 # what should this be changed to
 epochs = 120
-learning_rates = [0.25, 0.1, 0.01]
-optimizers = []
-for lr in learning_rates:
-  optimizer = keras.optimizers.SGD(learning_rate=lr, momentum=0.0, weight_decay=0.0)
-  optimizers.append(optimizer)
-  optimizer = keras.optimizers.Adam(learning_rate=lr)
-  optimizers.append(optimizer)
+# learning_rates = [0.25, 0.1, 0.01]
+# optimizers = []
+# loss = tf.keras.losses.BinaryCrossentropy(from_logits=False)
 
-#opt1=keras.optimizers.SGD(learning_rate=0.001, momentum=0.0, weight_decay=0.0)
-#opt2=keras.optimizers.Adam(learning_rate=0.001)
+# for lr in learning_rates:
+#   optimizer = keras.optimizers.SGD(learning_rate=lr, momentum=0.0, weight_decay=0.0)
+#   optimizers.append(optimizer)
+#   optimizer = keras.optimizers.Adam(learning_rate=lr)
+#   optimizers.append(optimizer)
+
+# for i, opt in enumerate(optimizers):
+#   model = create_model(initializer, regularizer)
+#   model.compile(
+#       optimizer=opt,
+#       loss=loss,
+#       metrics=["accuracy"],
+#   )
+#   optimizer_type = opt.get_config()['name']
+#   learning_rate = opt.get_config()['learning_rate']
+# #   history=model.fit(features, target, batch_size=batch_size, epochs=epochs)
+#   #history=model.fit(features_train, target_train, batch_size=batch_size, epochs=epochs, validation_data=(features_test, target_test))
+#   history=model.fit(features_train, target_train, batch_size=batch_size, epochs=epochs, validation_data=(features_test, target_test), verbose=0,callbacks=[print_final_accuracy_callback])
+#   plt.plot(history.history['accuracy'])
+#   plt.plot(history.history['val_accuracy'])
+#   plt.title('model accuracy')
+#   plt.ylabel('accuracy')
+#   plt.xlabel('epoch')
+#   plt.legend(['train (' + optimizer_type + ', LR=' + str(learning_rate) + ')', 'validation'], loc='upper left')
+#   plt.savefig(f'graphs/{optimizer_type} {learning_rate:.2} plot{i}.png')
+#   plt.clf()
+  
+
+opt = keras.optimizers.SGD(learning_rate=0.1, momentum=0.0, weight_decay=0.0)
 loss = tf.keras.losses.BinaryCrossentropy(from_logits=False)
-for i, opt in enumerate(optimizers):
-  model = create_model(initializer, regularizer)
-  model.compile(
-      optimizer=opt,
-      loss=loss,
-      metrics=["accuracy"],
-  )
-  optimizer_type = opt.get_config()['name']
-  learning_rate = opt.get_config()['learning_rate']
-#   history=model.fit(features, target, batch_size=batch_size, epochs=epochs)
-  #history=model.fit(features_train, target_train, batch_size=batch_size, epochs=epochs, validation_data=(features_test, target_test))
-  history=model.fit(features_train, target_train, batch_size=batch_size, epochs=epochs, validation_data=(features_test, target_test), verbose=0,callbacks=[print_final_accuracy_callback])
-  plt.plot(history.history['accuracy'])
-  plt.plot(history.history['val_accuracy'])
-  plt.title('model accuracy')
-  plt.ylabel('accuracy')
-  plt.xlabel('epoch')
-  plt.legend(['train (' + optimizer_type + ', LR=' + str(learning_rate) + ')', 'validation'], loc='upper left')
-  plt.savefig(f'plot{i}.png')
-  plt.clf()
+model = create_model(initializer, regularizer)
+model.compile(
+    optimizer=opt,
+    loss=loss,
+    metrics=["accuracy"],
+)
+history=model.fit(features_train, target_train, batch_size=batch_size, epochs=epochs, validation_data=(features_test, target_test), verbose=0,callbacks=[print_final_accuracy_callback])
+test_pred = model.predict(features_test)
+output = data[ids >= 22300000]
+output["Model Win Prob"] = test_pred
+output.to_csv("23_results.csv")
+
+
+# print(output["GAME_DATE"])
+# print(output[["GAME_ID", "GAME_DATE", "TEAM_NAME"]].shape)
