@@ -1,5 +1,8 @@
 import pandas as pd
 import numpy as np
+import datetime as dt
+
+
 pd.set_option('display.max_columns', None)
 # pd.set_option('display.max_rows', None)
 
@@ -7,18 +10,25 @@ model_prob = pd.read_csv("23_results.csv")
 implied_prob = pd.read_csv("historical_odds.csv")
 # print(model_prob['Model Win Prob'].shape, implied_prob.shape)
 
+model_prob = model_prob[['TEAM_NAME', 'GAME_DATE', 'Model Win Prob', 'WL']]
+implied_prob['Date'] = pd.to_datetime(implied_prob['Date']).dt.date
+model_prob['GAME_DATE'] = pd.to_datetime(model_prob['GAME_DATE']).dt.date
+# print(implied_prob['Date'], model_prob['GAME_DATE'])
 
-implied_prob["Model Prob"] = model_prob['Model Win Prob']
-implied_prob["Result"] = model_prob['WL']
+results = pd.merge(implied_prob, model_prob, how='inner', left_on=['Date', 'Team'], right_on=['GAME_DATE', 'TEAM_NAME'])
 
-implied_prob["Difference"] = implied_prob["Model Prob"] - implied_prob["Estimated Win Percentage"]
+results["Difference"] = results["Model Win Prob"] - results["Estimated Win Percentage"]
 
-implied_prob.sort_values(by="Difference", ascending=False, inplace=True, key=abs)
-
+results.sort_values(by="Difference", ascending=False, inplace=True, key=abs)
 
 def checkResult(row):
-    return (row["Difference"] > 0) == (row['Result'] == 1)
+    return (row["Difference"] > 0) == (row['WL'] == 1)
 
-implied_prob["Would have profitted"] = implied_prob.apply(checkResult, axis=1)
 
-print(implied_prob[:100]["Would have profitted"].value_counts())
+results["Would have profitted"] = results.apply(checkResult, axis=1)
+print(results[:10])
+
+# print(results[:5]["Would have profitted"].value_counts())
+#
+# # print(results)
+# # results.to_csv("results.csv")

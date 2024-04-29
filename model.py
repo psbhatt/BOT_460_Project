@@ -1,6 +1,7 @@
 import pandas as pd
 import numpy as np
 import matplotlib
+matplotlib.use('Agg')
 import matplotlib.pyplot as plt
 from sklearn.decomposition import PCA
 import tensorflow as tf
@@ -44,6 +45,7 @@ target_train = target[ids < 22300000]
 target_test = target[ids >= 22300000]
 print(features_train.shape)
 
+
 class PrintFinalAccuracy(tf.keras.callbacks.Callback):
     def on_epoch_end(self, epoch, logs=None):
         if epoch == (epochs - 1):
@@ -77,7 +79,6 @@ def create_model(initializer, regularizer):
     ])
     return model
 
-# model = create_model(initializer, regularizer)
 batch_size = 64 # what should this be changed to
 epochs = 120
 # learning_rates = [0.25, 0.1, 0.01]
@@ -112,7 +113,7 @@ epochs = 120
 #   plt.clf()
   
 
-opt = keras.optimizers.SGD(learning_rate=0.1, momentum=0.0, weight_decay=0.0)
+opt = keras.optimizers.SGD(learning_rate=0.01, momentum=0.0, weight_decay=0.0)
 loss = tf.keras.losses.BinaryCrossentropy(from_logits=False)
 model = create_model(initializer, regularizer)
 model.compile(
@@ -120,7 +121,16 @@ model.compile(
     loss=loss,
     metrics=["accuracy"],
 )
-history=model.fit(features_train, target_train, batch_size=batch_size, epochs=epochs, validation_data=(features_test, target_test), verbose=0,callbacks=[print_final_accuracy_callback])
+history = model.fit(features_train, target_train, batch_size=batch_size, epochs=epochs, validation_data=(features_test, target_test), verbose=0,callbacks=[print_final_accuracy_callback])
+plt.plot(history.history['accuracy'])
+plt.plot(history.history['val_accuracy'])
+plt.title('model accuracy')
+plt.ylabel('accuracy')
+plt.xlabel('epoch')
+plt.legend(['train (' + 'SGD' + ', LR=' + str(0.01) + ')', 'validation'], loc='upper left')
+# plt.savefig(f'graphs/{optimizer_type} {learning_rate:.2} plot{i}.png')
+plt.clf()
+plt.show()
 test_pred = model.predict(features_test)
 output = data[ids >= 22300000]
 output["Model Win Prob"] = test_pred
