@@ -32,8 +32,6 @@ def calcProfit(row):
             return -100
         return row["Opposing Odds"]
 
-    return (row["Difference"] > 0) == (row['WL'] == 1)
-
 
 results["Profit"] = results.apply(calcProfit, axis=1)
 print("Total Profit over the 100 games where we most disagreed with the Moneyline Odds: ", results["Profit"][:100].sum())
