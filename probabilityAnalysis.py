@@ -24,13 +24,17 @@ results.sort_values(by="Difference", ascending=False, inplace=True, key=abs)
 def calcProfit(row):
     if row["Difference"] > 0:
         if row['WL']:
-            return row["Moneyline Odds"]
+            if row['Moneyline Odds'] > 0:
+                return row["Moneyline Odds"]
+            return 10000 / abs(row["Moneyline Odds"])
         return -100
 
     if row["Difference"] < 0:
         if row['WL']:
             return -100
-        return row["Opposing Odds"]
+        if row["Opposing Odds"] > 0:
+            return row["Opposing Odds"]
+        return 10000 / abs(row["Opposing Odds"])
 
 
 results["Profit"] = results.apply(calcProfit, axis=1)
