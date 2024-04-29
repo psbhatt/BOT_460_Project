@@ -21,14 +21,21 @@ results["Difference"] = results["Model Win Prob"] - results["Estimated Win Perce
 
 results.sort_values(by="Difference", ascending=False, inplace=True, key=abs)
 
-def checkResult(row):
+def calcProfit(row):
+    if row["Difference"] > 0:
+        if row['WL']:
+            return row["Moneyline Odds"]
+        return -100
+
+    if row["Difference"] < 0:
+        if row['WL']:
+            return -100
+        return row["Opposing Odds"]
+
     return (row["Difference"] > 0) == (row['WL'] == 1)
 
 
-results["Would have profitted"] = results.apply(checkResult, axis=1)
-print(results[:10])
+results["Profit"] = results.apply(calcProfit, axis=1)
+print("Total Profit over the 100 games where we most disagreed with the Moneyline Odds: ", results["Profit"][:100].sum())
 
-# print(results[:5]["Would have profitted"].value_counts())
-#
-# # print(results)
-# # results.to_csv("results.csv")
+results.to_csv("results.csv")
