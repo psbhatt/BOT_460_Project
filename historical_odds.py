@@ -11,8 +11,8 @@ ODDS_FORMAT = 'american'
 DATE_FORMAT = 'iso'
 
 # Define the start and end dates
-start_date = datetime(2022, 10, 24)
-end_date = datetime(2023, 4, 14)
+start_date = datetime(2023, 10, 24)
+end_date = datetime(2024, 4, 14)
 
 # Initialize start date
 current_date = start_date
