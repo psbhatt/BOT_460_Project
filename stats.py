@@ -1,46 +1,3 @@
-#
-#
-# def fg_pct(data, group=''):
-#     return data[group + 'FGM'] / data[group + 'FGA']
-#
-#
-# def fg2a(data, group=''):
-#     return data[group + 'FGA'] - data[group + 'FG3A']
-#
-#
-# def fg2m(data, group=''):
-#     return data[group + 'FGM'] - data[group + 'FG3M']
-#
-#
-# def fg2_pct(data, group=''):
-#     return fg2m(data, group) / fg2a(data, group)
-#
-#
-# def fg3_pct(data, group=''):
-#     return data[group + 'FG3M'] / data[group + 'FG3A']
-#
-#
-# def fg3a_rate(data, group=''):
-#     return data[group + 'FG3A'] / data[group + 'FGA']
-#
-#
-# def ft_pct(data, group=''):
-#     return data[group + 'FTM'] / data[group + 'FTA']
-#
-#
-# def ft_rate(data, group=''):
-#     return data[group + 'FTA'] / data[group + 'FGA']
-#
-#
-# def ts_pct(data, group=''):
-#     return data[group + 'PTS'] / (
-#         2 * (data[group + 'FGA'] + 0.44 * data[group + 'FTA'])
-#     )
-#
-#
-# def ast_pct(data):
-#     return data.AST / data.FGM
-
 def eff_fg_pct(data, group=''):
     return (data[group + 'FGM'] + 0.5 * data[group + 'FG3M']) / data[group + 'FGA']
 
@@ -161,11 +118,3 @@ def possessions_OPP(data):
                    * (data.OREB / (data.OREB + data.DREB_OPP))
                    * (data.FGA - data.FGM)
            ) / 2
-
-
-# def reb_pct(data):
-#     return data.REB / (data.REB + data.REB_OPP)
-#
-#
-# def stl_pct(data):
-#     return data.STL / possessions(data)

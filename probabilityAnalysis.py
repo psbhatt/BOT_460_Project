@@ -1,26 +1,29 @@
 import pandas as pd
-import numpy as np
-import datetime as dt
-
-
 pd.set_option('display.max_columns', None)
-# pd.set_option('display.max_rows', None)
 
-model_prob = pd.read_csv("23_results.csv")
-implied_prob = pd.read_csv("historical_odds.csv")
-# print(model_prob['Model Win Prob'].shape, implied_prob.shape)
+# load nba data with model results
+model_prob = pd.read_csv("data/23_results.csv")
+# load odds with implied probabilities
+implied_prob = pd.read_csv("data/historical_odds.csv")
 
+# remove unneeded columns from nba data
 model_prob = model_prob[['TEAM_NAME', 'GAME_DATE', 'Model Win Prob', 'WL']]
+
+# convert dates to datetime objects for comparison
 implied_prob['Date'] = pd.to_datetime(implied_prob['Date']).dt.date
 model_prob['GAME_DATE'] = pd.to_datetime(model_prob['GAME_DATE']).dt.date
-# print(implied_prob['Date'], model_prob['GAME_DATE'])
 
+# merge odds and model results together based on team name and date of game
 results = pd.merge(implied_prob, model_prob, how='inner', left_on=['Date', 'Team'], right_on=['GAME_DATE', 'TEAM_NAME'])
 
+# calculate difference between model win probability and implied win prob from odds
 results["Difference"] = results["Model Win Prob"] - results["Estimated Win Percentage"]
 
+# sort by greatest differences
 results.sort_values(by="Difference", ascending=False, inplace=True, key=abs)
 
+
+# method to calculate expected profit based on appropriate bet from odds comparison
 def calcProfit(row):
     if row["Difference"] > 0:
         if row['WL']:
@@ -37,7 +40,12 @@ def calcProfit(row):
         return 10000 / abs(row["Opposing Odds"])
 
 
+# apply profit calculation to data
 results["Profit"] = results.apply(calcProfit, axis=1)
-print("Total Profit over the 100 games where we most disagreed with the Moneyline Odds: ", results["Profit"][:100].sum())
 
-results.to_csv("results.csv")
+# print results
+print("Total Profit over the 100 games where we most disagreed with the Moneyline Odds: ", results["Profit"][:100].sum())
+print("Total Profit over the games with difference > 20%: ", results["Profit"][results['Difference'] > 0.2].sum())
+
+# output to a final csv
+results.to_csv("data/results.csv")

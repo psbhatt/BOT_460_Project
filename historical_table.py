@@ -20,6 +20,6 @@ columns = ['Date', 'Matchup', 'Bookmaker', 'Team', 'Moneyline Odds']
 df = pd.DataFrame(events, columns=columns)
 
 # Output DataFrame to a CSV file
-csv_filename = 'historical_odds.csv'
+csv_filename = 'data/historical_odds.csv'
 df.to_csv(csv_filename, index=False)
 print(f"Data saved to {csv_filename}")
