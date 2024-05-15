@@ -9,3 +9,6 @@ To reproduce results here's an explanation of what each Python script does, in t
 4. historical_table.py: **DO NOT RUN** Converts the odds JSON to historical_odds.csv
 5. oddsConvert.py: takes historical_odds.csv and modifies it so every row has the odds for both teams in the game, converts the odds of one team to an implied win probability, then saves back to the same csv
 6. probabilityAnalysis.py: takes both 23_results.csv and historical_odds.csv. This merges those two datasets based on team and date and then computes the difference between the model's estimated win probability and the implied win probability. It then tests what the profits would have been had we bet on different sets of games based on the difference.
+
+
+The file named CS_460_Project__Copy_ is a report of the project.
