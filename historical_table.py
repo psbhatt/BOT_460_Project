@@ -2,12 +2,13 @@ import pandas as pd
 import json
 
 # Read JSON file containing historical odds data
-with open('historical_odds.json', 'r') as infile:
+with open('nba_odds_today.json', 'r') as infile:
     odds_data = json.load(infile)
 
 # Prepare lists to hold extracted data
 events = []
 for event in odds_data:
+    print(event)
     date = event['Date']
     matchup = event['Matchup']
     bookmaker = event['Bookmaker']
@@ -20,6 +21,6 @@ columns = ['Date', 'Matchup', 'Bookmaker', 'Team', 'Moneyline Odds']
 df = pd.DataFrame(events, columns=columns)
 
 # Output DataFrame to a CSV file
-csv_filename = 'data/historical_odds.csv'
+csv_filename = 'data/todays_odds.csv'
 df.to_csv(csv_filename, index=False)
 print(f"Data saved to {csv_filename}")

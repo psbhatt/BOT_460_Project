@@ -2,9 +2,9 @@ import pandas as pd
 pd.set_option('display.max_columns', None)
 
 # load nba data with model results
-model_prob = pd.read_csv("data/23_results.csv")
+model_prob = pd.read_csv("data/25_results.csv")
 # load odds with implied probabilities
-implied_prob = pd.read_csv("data/historical_odds.csv")
+implied_prob = pd.read_csv("data/todays_odds.csv")
 
 # remove unneeded columns from nba data
 model_prob = model_prob[['TEAM_NAME', 'GAME_DATE', 'Model Win Prob', 'WL']]
@@ -12,9 +12,12 @@ model_prob = model_prob[['TEAM_NAME', 'GAME_DATE', 'Model Win Prob', 'WL']]
 # convert dates to datetime objects for comparison
 implied_prob['Date'] = pd.to_datetime(implied_prob['Date']).dt.date
 model_prob['GAME_DATE'] = pd.to_datetime(model_prob['GAME_DATE']).dt.date
+print(implied_prob)
+print(model_prob)
 
 # merge odds and model results together based on team name and date of game
 results = pd.merge(implied_prob, model_prob, how='inner', left_on=['Date', 'Team'], right_on=['GAME_DATE', 'TEAM_NAME'])
+print(results)
 
 # calculate difference between model win probability and implied win prob from odds
 results["Difference"] = results["Model Win Prob"] - results["Estimated Win Percentage"]
@@ -22,6 +25,7 @@ results["Difference"] = results["Model Win Prob"] - results["Estimated Win Perce
 # sort by greatest differences
 results.sort_values(by="Difference", ascending=False, inplace=True, key=abs)
 
+print(results)
 
 # method to calculate expected profit based on appropriate bet from odds comparison
 def calcProfit(row):

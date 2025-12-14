@@ -9,7 +9,7 @@ def converter(line):
 
 
 # import odds pulled from odds_api
-odds = pd.read_csv("data/historical_odds.csv")
+odds = pd.read_csv("data/todays_odds.csv")
 
 # group games together
 groups = odds.groupby(["Date", "Matchup"])
@@ -31,4 +31,4 @@ odds["Opposing Odds"] = [opposing_odds_dict[(date, matchup)][team] for date, mat
 odds["Estimated Win Percentage"] = odds["Moneyline Odds"].apply(converter)
 
 # export updated dataset to the original csv
-odds.to_csv("data/historical_odds.csv")
+odds.to_csv("data/todays_odds.csv")

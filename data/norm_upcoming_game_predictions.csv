@@ -1,0 +1,19 @@
+TEAM_ID,TEAM_NAME,GAME_DATE,MATCHUP,HOME,Model Win Prob
+1610612739.0,Cleveland Cavaliers,2025-11-22,Cleveland Cavaliers vs Indiana Pacers,1,0.7602709
+1610612738.0,Boston Celtics,2025-11-22,Boston Celtics vs Brooklyn Nets,1,0.85195696
+1610612761.0,Toronto Raptors,2025-11-22,Toronto Raptors vs Washington Wizards,1,0.8209688
+1610612741.0,Chicago Bulls,2025-11-22,Chicago Bulls vs Miami Heat,1,0.5789752
+1610612742.0,Dallas Mavericks,2025-11-22,Dallas Mavericks vs New Orleans Pelicans,1,0.73158336
+1610612756.0,Phoenix Suns,2025-11-22,Phoenix Suns vs Minnesota Timberwolves,1,0.60464156
+1610612745.0,Houston Rockets,2025-11-22,Houston Rockets vs Denver Nuggets,1,0.5574899
+1610612744.0,Golden State Warriors,2025-11-22,Golden State Warriors vs Portland Trail Blazers,1,0.7370211
+1610612762.0,Utah Jazz,2025-11-22,Utah Jazz vs Oklahoma City Thunder,1,0.27476993
+1610612754.0,Indiana Pacers,2025-11-22,Cleveland Cavaliers vs Indiana Pacers,0,0.2397291
+1610612751.0,Brooklyn Nets,2025-11-22,Boston Celtics vs Brooklyn Nets,0,0.14804304
+1610612764.0,Washington Wizards,2025-11-22,Toronto Raptors vs Washington Wizards,0,0.1790312
+1610612748.0,Miami Heat,2025-11-22,Chicago Bulls vs Miami Heat,0,0.4210248
+1610612740.0,New Orleans Pelicans,2025-11-22,Dallas Mavericks vs New Orleans Pelicans,0,0.26841664
+1610612750.0,Minnesota Timberwolves,2025-11-22,Phoenix Suns vs Minnesota Timberwolves,0,0.39535844
+1610612743.0,Denver Nuggets,2025-11-22,Houston Rockets vs Denver Nuggets,0,0.44251013
+1610612757.0,Portland Trail Blazers,2025-11-22,Golden State Warriors vs Portland Trail Blazers,0,0.2629789
+1610612760.0,Oklahoma City Thunder,2025-11-22,Utah Jazz vs Oklahoma City Thunder,0,0.7252301

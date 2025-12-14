@@ -4,76 +4,53 @@ import time
 import json
 
 # Replace with your actual API key
-API_KEY = '0316c24097211ce1cd18e57e3bbf2ef5'
+# API_KEY = '0316c24097211ce1cd18e57e3bbf2ef5'
+API_KEY = '4bc436933957f838dddbee900dd709da'
 SPORT = 'basketball_nba'
-MARKET = 'h2h'
+MARKET = 'h2h'  # moneyline odds
 ODDS_FORMAT = 'american'
 DATE_FORMAT = 'iso'
 
-# Define the start and end dates
-start_date = datetime(2023, 10, 24)
-end_date = datetime(2024, 4, 14)
+odds_url = (
+    f'https://api.the-odds-api.com/v4/sports/{SPORT}/odds'
+)
 
-# Initialize start date
-current_date = start_date
+params = {
+    'apiKey': API_KEY,
+    'regions': 'us',
+    'markets': MARKET,
+    'oddsFormat': ODDS_FORMAT,
+    'dateFormat': DATE_FORMAT
+}
 
-# List to hold extracted data
+response = requests.get(odds_url, params=params)
+if response.status_code != 200:
+    print(f'Failed to fetch odds. Status: {response.status_code}, Msg: {response.text}')
+    exit()
+
+odds_data = response.json()
 events = []
 
-while current_date <= end_date:
-    # Convert current date to the desired format
-    current_date_str = current_date.strftime('%Y-%m-%dT12:00:00Z')
+for event in odds_data:
+    home_team = event.get('home_team')
+    away_team = event.get('away_team')
+    commence_time = event.get('commence_time')
+    for bookmaker in event.get('bookmakers', []):
+        if bookmaker['key'] == 'draftkings':  # Change or remove to include other books
+            for market in bookmaker.get('markets', []):
+                if market['key'] == MARKET:
+                    for outcome in market.get('outcomes', []):
+                        team = outcome['name']
+                        price = outcome['price']
+                        events.append({
+                            'Date': commence_time,
+                            'Matchup': f"{home_team} vs {away_team}",
+                            'Bookmaker': bookmaker['key'],
+                            'Team': team,
+                            'Moneyline Odds': price
+                        })
 
-    # Make API request for the current date
-    response = requests.get(
-        f'https://api.the-odds-api.com/v4/historical/sports/{SPORT}/odds',
-        params={
-            'api_key': API_KEY,
-            'regions': 'us',
-            'markets': MARKET,
-            'oddsFormat': ODDS_FORMAT,
-            'dateFormat': DATE_FORMAT,
-            'date': current_date_str,
-        }
-    )
-
-    if response.status_code == 200:
-        odds_data = response.json()
-        # Check if there is a 'X-RateLimit-Remaining' header
-        remaining_requests = response.headers.get('X-RateLimit-Remaining')
-        if remaining_requests is not None:
-            print(f'Remaining requests: {remaining_requests}')
-        # Process the odds data
-        for event in odds_data['data']:
-            if (datetime.strptime(event['commence_time'], "%Y-%m-%dT%H:%M:%SZ") - timedelta(hours=4, minutes=0)).date() == current_date.date():
-                    for bookmaker in event['bookmakers']:
-                        if bookmaker['key'] == 'draftkings':
-                            for market in bookmaker['markets']:
-                                if market['key'] == MARKET:
-                                    for outcome in market['outcomes']:
-                                        home_team = event['home_team']
-                                        away_team = event['away_team']
-                                        team = outcome['name']
-                                        price = outcome['price']
-                                        events.append({
-                                            'Date': current_date_str,
-                                            'Matchup': f"{home_team} vs {away_team}",
-                                            'Bookmaker': bookmaker['key'],
-                                            'Team': team,
-                                            'Moneyline Odds': price
-                                        })
-
-    else:
-        print(f'Failed to fetch data for {current_date_str}')
-
-    # Move to the next day
-    current_date += timedelta(days=1)
-
-    # Add a small delay to comply with rate limits
-    time.sleep(1)
-
-# Save extracted data to a JSON file
-with open('historical_odds.json', 'w') as outfile:
+with open('nba_odds_today.json', 'w') as outfile:
     json.dump(events, outfile)
 
-print("Data saved to historical_odds.json")
+print(f"Saved odds for {len(events)} lines to nba_odds_today.json")

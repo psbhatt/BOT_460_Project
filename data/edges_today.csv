@@ -1,0 +1,19 @@
+Unnamed: 0,Date,Matchup,Bookmaker,Team,Moneyline Odds,Opposing Odds,Estimated Win Percentage,TEAM_NAME,GAME_DATE,Model Win Prob,Difference
+0,2025-12-14,Indiana Pacers vs Washington Wizards,draftkings,Indiana Pacers,-360,285,0.782608695652174,Indiana Pacers,2025-12-14,0.5921417,-0.19046699565217395
+1,2025-12-14,Indiana Pacers vs Washington Wizards,draftkings,Washington Wizards,285,-360,0.2597402597402597,Washington Wizards,2025-12-14,0.4078583,0.1481180402597403
+2,2025-12-14,Cleveland Cavaliers vs Charlotte Hornets,draftkings,Charlotte Hornets,390,-520,0.2040816326530612,Charlotte Hornets,2025-12-14,0.32089937,0.11681773734693882
+3,2025-12-14,Cleveland Cavaliers vs Charlotte Hornets,draftkings,Cleveland Cavaliers,-520,390,0.8387096774193549,Cleveland Cavaliers,2025-12-14,0.67910063,-0.1596090474193549
+4,2025-12-14,Atlanta Hawks vs Philadelphia 76ers,draftkings,Atlanta Hawks,-205,170,0.6721311475409836,Atlanta Hawks,2025-12-14,0.67678964,0.0046584924590163945
+5,2025-12-14,Atlanta Hawks vs Philadelphia 76ers,draftkings,Philadelphia 76ers,170,-205,0.3703703703703703,Philadelphia 76ers,2025-12-14,0.32321036,-0.04716001037037032
+6,2025-12-14,Brooklyn Nets vs Milwaukee Bucks,draftkings,Brooklyn Nets,105,-125,0.4878048780487805,Brooklyn Nets,2025-12-14,0.3477448,-0.14006007804878046
+7,2025-12-14,Brooklyn Nets vs Milwaukee Bucks,draftkings,Milwaukee Bucks,-125,105,0.5555555555555556,Milwaukee Bucks,2025-12-14,0.6522552,0.09669964444444445
+8,2025-12-15,Chicago Bulls vs New Orleans Pelicans,draftkings,Chicago Bulls,-198,164,0.6644295302013423,Chicago Bulls,2025-12-15,0.7605301,0.09610056979865766
+9,2025-12-15,Chicago Bulls vs New Orleans Pelicans,draftkings,New Orleans Pelicans,164,-198,0.3787878787878788,New Orleans Pelicans,2025-12-15,0.23946989,-0.1393179887878788
+10,2025-12-15,Minnesota Timberwolves vs Sacramento Kings,draftkings,Minnesota Timberwolves,-550,410,0.8461538461538461,Minnesota Timberwolves,2025-12-15,0.7599849,-0.08616894615384618
+11,2025-12-15,Minnesota Timberwolves vs Sacramento Kings,draftkings,Sacramento Kings,410,-550,0.196078431372549,Sacramento Kings,2025-12-15,0.24001509,0.043936658627451
+12,2025-12-15,Phoenix Suns vs Los Angeles Lakers,draftkings,Los Angeles Lakers,-135,114,0.574468085106383,Los Angeles Lakers,2025-12-15,0.41125262,-0.16321546510638302
+13,2025-12-15,Phoenix Suns vs Los Angeles Lakers,draftkings,Phoenix Suns,114,-135,0.4672897196261682,Phoenix Suns,2025-12-15,0.5887474,0.12145768037383181
+14,2025-12-15,Portland Trail Blazers vs Golden State Warriors,draftkings,Golden State Warriors,-185,154,0.6491228070175439,Golden State Warriors,2025-12-15,0.546432,-0.10269080701754385
+15,2025-12-15,Portland Trail Blazers vs Golden State Warriors,draftkings,Portland Trail Blazers,154,-185,0.3937007874015748,Portland Trail Blazers,2025-12-15,0.453568,0.0598672125984252
+16,2025-12-17,New York Knicks vs San Antonio Spurs,draftkings,New York Knicks,-130,110,0.5652173913043478,New York Knicks,2025-12-17,0.67280376,0.10758636869565219
+17,2025-12-17,New York Knicks vs San Antonio Spurs,draftkings,San Antonio Spurs,110,-130,0.4761904761904761,San Antonio Spurs,2025-12-17,0.32719624,-0.14899423619047608
