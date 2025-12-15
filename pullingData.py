@@ -10,12 +10,10 @@ def expanding_mean(group):
 def main():
     # Step 1: Pull historic data and calculate season stats
     season_list = []
-    for i in range(2019, 2019):
+    for i in range(2019, 2026):
         games = LeagueGameLog(season=i, season_type_all_star='Regular Season').get_data_frames()[0]
         games = games.merge(games, how='inner', on='GAME_ID', suffixes=[None, '_OPP'])
         games = games[games["TEAM_ID"] != games["TEAM_ID_OPP"]].reset_index(drop=True)
-
-        # games = games[games["MATCHUP"].str.contains('vs')].reset_index(drop=True)
 
 
         games.drop(columns=['SEASON_ID', 'VIDEO_AVAILABLE', 'SEASON_ID_OPP', 'VIDEO_AVAILABLE_OPP', 'WL_OPP'], inplace=True)
@@ -52,7 +50,7 @@ def main():
              'TEAM_NAME_OPP', 'WL', 'GAME_ID', 'MIN', 'MIN_OPP', 'HOME', 'TEAM_ID', 'TEAM_ID_OPP']
         
         # game_stats are the remaining columns, or stats, that we wish to apply expanding mean on
-        game_stats = games.columns.difference(name_cols)
+        game_stats = games.columns.difference(name_cols) 
 
         # get all the previous games for both the home team and the away team, and then calculate their average stats up until the current matchup
         grouped_home = games.groupby('TEAM_ID', group_keys=False)[[col for col in game_stats if not col.endswith('_OPP')]].apply(expanding_mean)
@@ -96,11 +94,10 @@ def main():
         away_games = historic_df.groupby('TEAM_NAME_OPP').get_group(away_team)
         home_last_game = home_games[home_games['GAME_DATE'] <= max_game_date].sort_values('GAME_DATE').iloc[-1].copy()
         away_last_game = away_games[away_games['GAME_DATE'] <= max_game_date].sort_values('GAME_DATE').iloc[-1].copy()
-
-
+  
         name_cols =  ['GAME_DATE', 'GAME_DATE_OPP', 'MATCHUP', 'MATCHUP_OPP',
             'TEAM_ABBREVIATION', 'TEAM_ABBREVIATION_OPP', 'TEAM_NAME',
-            'TEAM_NAME_OPP', 'WL', 'GAME_ID', 'MIN', 'MIN_OPP', 'HOME']
+            'TEAM_NAME_OPP', 'WL', 'GAME_ID', 'MIN', 'MIN_OPP', 'HOME', 'TEAM_ID','TEAM_ID_OPP']
         game_cols = games.columns.difference(name_cols)
 
         new_row = {
@@ -116,7 +113,9 @@ def main():
             game_stats_opp = away_last_game[[col for col in game_cols if col.endswith('_OPP')]]
 
             new_row.update({
-                'GAME_ID': home_last_game['GAME_ID'],
+                'GAME_ID': home_last_game['GAME_ID'], # wrong but shouldnt matter
+                'TEAM_ID': home_last_game['TEAM_ID'],
+                'TEAM_ID_OPP': away_last_game['TEAM_ID_OPP'],
                 'TEAM_NAME': home_team,
                 'TEAM_NAME_OPP': away_team,
                 'TEAM_ABBREVIATION': home_last_game['TEAM_ABBREVIATION'],
@@ -127,13 +126,20 @@ def main():
                 **game_stats_opp,
             })
         else:
-            game_stats_home = home_last_game[[col for col in game_cols if col.endswith('_OPP')]]
-            game_stats_opp = away_last_game[[col for col in game_cols if not col.endswith('_OPP')]]
+            game_stats_home = away_last_game[[col for col in game_cols if col.endswith('_OPP')]]
+            game_stats_opp = home_last_game[[col for col in game_cols if not col.endswith('_OPP')]]
+            # For game_stats_home: remove "_OPP" from index labels
+            game_stats_home = game_stats_home.rename(lambda x: x.replace('_OPP', ''))
+
+            # For game_stats_opp: add "_OPP" suffix to index labels  
+            game_stats_opp = game_stats_opp.rename(lambda x: x + '_OPP')
 
             new_row.update({
                 'GAME_ID': away_last_game['GAME_ID'],
                 'TEAM_NAME': away_team,
                 'TEAM_NAME_OPP': home_team,
+                'TEAM_ID': away_last_game['TEAM_ID_OPP'],
+                'TEAM_ID_OPP': home_last_game['TEAM_ID'],
                 'TEAM_ABBREVIATION': away_last_game['TEAM_ABBREVIATION_OPP'],
                 'TEAM_ABBREVIATION_OPP': home_last_game['TEAM_ABBREVIATION'],
                 'MIN': away_last_game['MIN'],
