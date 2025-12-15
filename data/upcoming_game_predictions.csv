@@ -1,19 +1,13 @@
 TEAM_ID,TEAM_NAME,GAME_DATE,MATCHUP,HOME,Model Win Prob
-1610612754.0,Indiana Pacers,2025-12-14,Indiana Pacers vs Washington Wizards,1,0.5921417
-1610612739.0,Cleveland Cavaliers,2025-12-14,Cleveland Cavaliers vs Charlotte Hornets,1,0.67910063
-1610612737.0,Atlanta Hawks,2025-12-14,Atlanta Hawks vs Philadelphia 76ers,1,0.67678964
-1610612751.0,Brooklyn Nets,2025-12-14,Brooklyn Nets vs Milwaukee Bucks,1,0.3477448
-1610612741.0,Chicago Bulls,2025-12-15,Chicago Bulls vs New Orleans Pelicans,1,0.7605301
-1610612750.0,Minnesota Timberwolves,2025-12-15,Minnesota Timberwolves vs Sacramento Kings,1,0.7599849
-1610612756.0,Phoenix Suns,2025-12-15,Phoenix Suns vs Los Angeles Lakers,1,0.5887474
-1610612757.0,Portland Trail Blazers,2025-12-15,Portland Trail Blazers vs Golden State Warriors,1,0.453568
-1610612752.0,New York Knicks,2025-12-17,New York Knicks vs San Antonio Spurs,1,0.67280376
-1610612764.0,Washington Wizards,2025-12-14,Indiana Pacers vs Washington Wizards,0,0.4078583
-1610612766.0,Charlotte Hornets,2025-12-14,Cleveland Cavaliers vs Charlotte Hornets,0,0.32089937
-1610612755.0,Philadelphia 76ers,2025-12-14,Atlanta Hawks vs Philadelphia 76ers,0,0.32321036
-1610612749.0,Milwaukee Bucks,2025-12-14,Brooklyn Nets vs Milwaukee Bucks,0,0.6522552
-1610612740.0,New Orleans Pelicans,2025-12-15,Chicago Bulls vs New Orleans Pelicans,0,0.23946989
-1610612758.0,Sacramento Kings,2025-12-15,Minnesota Timberwolves vs Sacramento Kings,0,0.24001509
-1610612747.0,Los Angeles Lakers,2025-12-15,Phoenix Suns vs Los Angeles Lakers,0,0.41125262
-1610612744.0,Golden State Warriors,2025-12-15,Portland Trail Blazers vs Golden State Warriors,0,0.546432
-1610612759.0,San Antonio Spurs,2025-12-17,New York Knicks vs San Antonio Spurs,0,0.32719624
+1610612738,Boston Celtics,2025-12-16,Boston Celtics vs Detroit Pistons,1,0.7887585
+1610612748,Miami Heat,2025-12-16,Miami Heat vs Toronto Raptors,1,0.6294816
+1610612762,Utah Jazz,2025-12-16,Utah Jazz vs Dallas Mavericks,1,0.41282284
+1610612743,Denver Nuggets,2025-12-16,Denver Nuggets vs Houston Rockets,1,0.6638451
+1610612746,LA Clippers,2025-12-16,Los Angeles Clippers vs Memphis Grizzlies,1,0.5756399
+1610612752,New York Knicks,2025-12-17,New York Knicks vs San Antonio Spurs,1,0.6800885
+1610612765,Detroit Pistons,2025-12-16,Boston Celtics vs Detroit Pistons,0,0.21124148
+1610612761,Toronto Raptors,2025-12-16,Miami Heat vs Toronto Raptors,0,0.3705184
+1610612742,Dallas Mavericks,2025-12-16,Utah Jazz vs Dallas Mavericks,0,0.58717716
+1610612745,Houston Rockets,2025-12-16,Denver Nuggets vs Houston Rockets,0,0.33615488
+1610612763,Memphis Grizzlies,2025-12-16,Los Angeles Clippers vs Memphis Grizzlies,0,0.4243601
+1610612759,San Antonio Spurs,2025-12-17,New York Knicks vs San Antonio Spurs,0,0.31991148
