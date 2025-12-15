@@ -10,7 +10,7 @@ def expanding_mean(group):
 def main():
     # Step 1: Pull historic data and calculate season stats
     season_list = []
-    for i in range(2019, 2026):
+    for i in range(2019, 2019):
         games = LeagueGameLog(season=i, season_type_all_star='Regular Season').get_data_frames()[0]
         games = games.merge(games, how='inner', on='GAME_ID', suffixes=[None, '_OPP'])
         games = games[games["TEAM_ID"] != games["TEAM_ID_OPP"]].reset_index(drop=True)
@@ -46,15 +46,19 @@ def main():
         games['FT_PER_FGA_OPP'] = stats.ft_per_fga_OPP(games)
         games['HOME'] = games['MATCHUP'].apply(lambda x: 0 if re.search(r'@', str(x)) else 1)
 
+        # name_cols is the list of metadata columns that we dont want to apply expanding means on
         name_cols =  ['GAME_DATE', 'GAME_DATE_OPP', 'MATCHUP', 'MATCHUP_OPP',
              'TEAM_ABBREVIATION', 'TEAM_ABBREVIATION_OPP', 'TEAM_NAME',
-             'TEAM_NAME_OPP', 'WL', 'GAME_ID', 'MIN', 'MIN_OPP', 'HOME']
+             'TEAM_NAME_OPP', 'WL', 'GAME_ID', 'MIN', 'MIN_OPP', 'HOME', 'TEAM_ID', 'TEAM_ID_OPP']
         
-        game_stats_home = games.columns.difference(name_cols + ['TEAM_ID_OPP'])
-        game_stats_opp = games.columns.difference(name_cols + ['TEAM_ID'])
-        grouped_home = games.groupby('TEAM_ID', group_keys=False)[[col for col in game_stats_home if not col.endswith('_OPP')]].apply(expanding_mean)
-        grouped_opp = games.groupby('TEAM_ID_OPP', group_keys=False)[[col for col in game_stats_opp if col.endswith('_OPP')]].apply(expanding_mean)
+        # game_stats are the remaining columns, or stats, that we wish to apply expanding mean on
+        game_stats = games.columns.difference(name_cols)
+
+        # get all the previous games for both the home team and the away team, and then calculate their average stats up until the current matchup
+        grouped_home = games.groupby('TEAM_ID', group_keys=False)[[col for col in game_stats if not col.endswith('_OPP')]].apply(expanding_mean)
+        grouped_opp = games.groupby('TEAM_ID_OPP', group_keys=False)[[col for col in game_stats if col.endswith('_OPP')]].apply(expanding_mean)
         
+        # create a new row for this matchup with the averaged stats and add to our set for the season
         grouped = grouped_home.join(grouped_opp).join(games[name_cols]).loc[:, games.columns.tolist()]        
         season_list.append(grouped)
 
@@ -63,9 +67,6 @@ def main():
     # Step 2: Load odds with upcoming games info
     odds_df = pd.read_csv("data/todays_odds.csv")  # Columns: Date, Matchup, Bookmaker, Team, Moneyline Odds, Opposing Odds, Estimated Win Percentage
     odds_df['Date'] = pd.to_datetime(odds_df['Date']).dt.date
-    # Find the latest date in the odds_df Date column
-    next_day = odds_df['Date'].max()
-    # odds_df = odds_df[odds_df['Date'] == next_day]
 
     # Step 3: Build new rows for upcoming games with rolling averages for those teams
     future_rows = []
@@ -83,18 +84,19 @@ def main():
             home_team = match.group(1)
             away_team = match.group(2)
 
+        home = row['Team'] == home_team
+
         if home_team == 'Los Angeles Clippers':
             home_team = 'LA Clippers'
 
         if away_team == 'Los Angeles Clippers':
             away_team = 'LA Clippers'
-            
-        home = row['Team'] == home_team
 
         home_games = historic_df.groupby('TEAM_NAME').get_group(home_team)
         away_games = historic_df.groupby('TEAM_NAME_OPP').get_group(away_team)
         home_last_game = home_games[home_games['GAME_DATE'] <= max_game_date].sort_values('GAME_DATE').iloc[-1].copy()
         away_last_game = away_games[away_games['GAME_DATE'] <= max_game_date].sort_values('GAME_DATE').iloc[-1].copy()
+
 
         name_cols =  ['GAME_DATE', 'GAME_DATE_OPP', 'MATCHUP', 'MATCHUP_OPP',
             'TEAM_ABBREVIATION', 'TEAM_ABBREVIATION_OPP', 'TEAM_NAME',
@@ -132,8 +134,8 @@ def main():
                 'GAME_ID': away_last_game['GAME_ID'],
                 'TEAM_NAME': away_team,
                 'TEAM_NAME_OPP': home_team,
-                'TEAM_ABBREVIATION': away_last_game['TEAM_ABBREVIATION'],
-                'TEAM_ABBREVIATION_OPP': home_last_game['TEAM_ABBREVIATION_OPP'],
+                'TEAM_ABBREVIATION': away_last_game['TEAM_ABBREVIATION_OPP'],
+                'TEAM_ABBREVIATION_OPP': home_last_game['TEAM_ABBREVIATION'],
                 'MIN': away_last_game['MIN'],
                 'MIN_OPP': home_last_game['MIN_OPP'],
                 **game_stats_home,
